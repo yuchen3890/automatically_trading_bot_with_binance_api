@@ -6,21 +6,24 @@ from linebot import (
 from linebot.exceptions import (
     InvalidSignatureError
 )
-from linebot.models import *
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 app = Flask(__name__)
 
 import os, sys
+from dotenv import load_dotenv
+
+load_dotenv()
 
 channel_secret = os.getenv('CHANNEL_SECRET', None)
 channel_access_token = os.getenv('CHANNEL_ACCESS_TOKEN', None)
 uid = os.getenv('UID', None)
 
 if channel_secret is None:
-    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    print('Specify CHANNEL_SECRET as environment variable.')
     sys.exit(1)
 if channel_access_token is None:
-    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    print('Specify CHANNEL_ACCESS_TOKEN as environment variable.')
     sys.exit(1)
 if uid is None:
     print('Specify UID as environment variable.')
@@ -38,6 +41,7 @@ line_bot_api.push_message(uid, TextSendMessage(text='你可以開始了'))
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
+
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
@@ -46,17 +50,17 @@ def callback():
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
 
     return 'OK'
 
 
-#訊息傳遞區塊
-##### 基本上程式編輯都在這個function #####
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token,message)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text))
 
 
 if __name__ == "__main__":
