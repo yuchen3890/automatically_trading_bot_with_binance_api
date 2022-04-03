@@ -1,0 +1,7 @@
+flask==1.1.2
+python_binance
+pandas
+asyncio
+nest_asyncio
+requests==2.20.1
+line-bot-sdk==1.19.0
