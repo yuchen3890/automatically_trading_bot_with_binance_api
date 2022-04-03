@@ -13,17 +13,13 @@ app = Flask(__name__)
 
 import os
 
-line_bot_api = LineBotApi(os.environ.get("CHANNEL_ACCESS_TOKEN"))
-parser = WebhookParser(os.environ.get("CHANNEL_SECRET"))
-
-
 # Channel Access Token
-line_bot_api = LineBotApi('CHANNEL_ACCESS_TOKEN')
+line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
 # Channel Secret
-handler = WebhookHandler('CHANNEL_SECRET')
+handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
 
-line_bot_api.push_message('UID', TextSendMessage(text='你可以開始了'))
+line_bot_api.push_message(os.environ.get('UID'), TextSendMessage(text='你可以開始了'))
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
