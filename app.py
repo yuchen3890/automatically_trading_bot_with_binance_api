@@ -8,18 +8,30 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
-
 app = Flask(__name__)
 
-import os
+import os, sys
+
+channel_secret = os.getenv('CHANNEL_SECRET', None)
+channel_access_token = os.getenv('CHANNEL_ACCESS_TOKEN', None)
+uid = os.getenv('UID', None)
+
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+if uid is None:
+    print('Specify UID as environment variable.')
+    sys.exit(1)
 
 # Channel Access Token
-line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
-
+line_bot_api = LineBotApi(channel_access_token)
 # Channel Secret
-handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
+handler = WebhookHandler(channel_secret)
 
-line_bot_api.push_message(os.environ.get('UID'), TextSendMessage(text='你可以開始了'))
+line_bot_api.push_message(uid, TextSendMessage(text='你可以開始了'))
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
@@ -47,7 +59,5 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token,message)
 
 
-#主程式
-import os if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    app.run()
