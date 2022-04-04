@@ -1,4 +1,4 @@
-flask==1.1.2
+flask
 gunicorn==19.9.0
 pandas
 line-bot-sdk==1.19.0
