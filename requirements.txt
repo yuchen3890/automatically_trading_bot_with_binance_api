@@ -5,5 +5,3 @@ python_binance==1.0.15
 pandas
 requests
 datetime
-os
-sys
