@@ -273,4 +273,4 @@ def handle_message(event):
             TextSendMessage(text="Sorry, I'm not sure what you're saying."))
 
 if __name__ == "__main__":
-    app.run()   
+    app.run(host='0.0.0.0', os.environ.get("PORT", 8000))
