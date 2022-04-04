@@ -32,7 +32,7 @@ load_dotenv()
 ## get env parameters 
 channel_secret = os.getenv('CHANNEL_SECRET', None)
 channel_access_token = os.getenv('CHANNEL_ACCESS_TOKEN', None)
-uid = os.getenv('UID', None)
+uid = os.getenv('USER_ID', None)
 
 if channel_secret is None:
     print('Specify CHANNEL_SECRET as environment variable.')
